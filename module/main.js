@@ -1,4 +1,4 @@
-define("Uploader", [], function(Uploader, handler) {
+define("Uploader", [], function(Uploader) {
 	return new function () { 
 	
 		var imageFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
@@ -83,8 +83,8 @@ define("Uploader", [], function(Uploader, handler) {
 				  	            label: "<i class=\"icon-upload\"> </i> Upload",
 				  	            onClick: function(){
 				  	            	var rect = [rectEl.offsetLeft, rectEl.offsetTop, 
-				  	            				rectEl.offsetLeft + rectEl.offsetWidth, 
-				  	            				rectEl.offsetTop  + rectEl.offsetHeight];
+				  	            				Math.min(rectEl.offsetLeft + rectEl.offsetWidth, img.width), 
+				  	            				Math.min(rectEl.offsetTop  + rectEl.offsetHeight, img.height)];
 				  	            	
 				  	            	/* return result */
 				  	            	deferred.resolve({ rect: rect.map(function(el, idx) { return el / (idx % 2 == 0 ? img.offsetWidth : img.offsetHeight) }), 
@@ -199,6 +199,7 @@ define("Uploader", [], function(Uploader, handler) {
 							var deferred = new dojo.Deferred();
 							var gistRequest = {
 							  "public": true,
+							  "description": "Gist upload from Warsztat, http://www.gamedev.pl",
 							  "files": {}
 							};
 							gistRequest.files[files[idx].name] = {content: data[1]};							
