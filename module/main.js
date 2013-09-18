@@ -124,8 +124,13 @@ define("Uploader", [], function(Uploader) {
 		            style: "width: 800px; z-index: 10000; text-align: center"								
 		        });
 		        
+		        var textfield = dojo.create('input', { type: 'textbox', placeholder: 'Podaj nazwę pliku', 
+		        	style: "float: left; font-size: 11px; margin-bottom: 5px;" });
+		        
 		        var textarea = dojo.create('textarea', { placeholder: 'Przeciągnij plik źródłowy z pulpitu lub wklej jego fragment, aby stworzyć nowego Gista.',
 		        	style: { width: '100%', height: '200px', fontSize: '11px' } }, gistDialog.containerNode);
+		        
+	        	dojo.place(textfield, textarea, 'before');
 		        
 		        if(file)
 			        readFile(file).then(function(content) {
@@ -143,8 +148,10 @@ define("Uploader", [], function(Uploader) {
 		  			var buttons = [];
 		  	        buttons.push(new Button({
 		  	            label: "<i class=\"icon-github-alt\"> </i> Upload na Gist",
-		  	            onClick: function(){		  	            	
-		  	        		deferred.resolve({ file: new Blob([textarea.value], {type: 'text/plain'}), gistDialog: gistDialog });							
+		  	            onClick: function(){		  	 
+		  	        		var file = new Blob([textarea.value], {type: 'text/plain'});
+		  	        		file.name = textfield.value;
+		  	        		deferred.resolve({ file: file, gistDialog: gistDialog });							
 							buttons.some(function(button) { button.setAttribute("disabled", true) });
 		  	            }
 		  	        }, dojo.create('span', {}, gistDialog.containerNode, 'last')));
